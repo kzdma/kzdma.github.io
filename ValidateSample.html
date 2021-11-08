@@ -1,0 +1,283 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="Styles/MyStyle.css" />
+    <title>דף הרשמה</title>
+    <script type="text/javascript">
+
+        window.onload = myInitilize;
+
+        function myInitilize() {
+            buildMPhonePref();
+            buildDateYear()
+        }
+        function buildDateYear() {
+            var myYear = document.getElementById("year");
+
+            for (i = 1960; i <= 2050; i++)
+                myYear.appendChild(new Option(i, i));
+
+            myYear.selectedIndex = 20;  //לסמן ערך מסוים לפי האינדקס ברשימה
+        }
+        function buildMPhonePref() {
+            var myPrefMobile = document.getElementById("mPhonePref");
+            var prefs = [
+                "050",
+                "051",
+                "052",
+                "053",
+                "054",
+                "055",
+                "058"
+            ];
+
+            for (i = 0; i <= prefs.length; i++)
+                myPrefMobile.appendChild(new Option(prefs[i], i+1));
+        }
+        function isLeapYear(tmpYear) {
+            if (((tmpYear % 4 == 0) && (tmpYear % 100 != 0)) || (tmpYear % 400 == 0))
+                return true;
+            return false;
+        }
+        function validateInitilize(controlName) {
+            var curretControlName = document.getElementById(controlName);
+            var error = document.getElementById(controlName + "_error");
+
+            curretControlName.style.borderColor = "";
+            error.innerHTML = "";
+        }
+        function validateUpdate(controlName, errorMessage) {
+            var curretControlName = document.getElementById(controlName);
+            var error = document.getElementById(controlName + "_error");
+
+            curretControlName.focus();
+            curretControlName.style.borderColor = "red";
+            error.innerHTML = errorMessage;
+        }
+
+        function validate() {
+
+            var fName = validateFName();
+            var sName = validateSName();
+            var uLogin = validateULogin()
+            var uPass = validateUPass();
+            var uPassVal = validateUPassValue();
+            var uEmail = validateUEmail();
+            var uMobile = validateUMobile()
+            var bDate = validateBDate();
+            var uTakanon = validateUTakanon();
+
+            return fName && sName && uLogin && uPass && uEmail && uMobile && bDate && uTakanon && uPassVal;
+        }
+
+        //בדיקת שם פרטי
+        function validateFName() {
+
+            var hebrewFlag = true;
+            var fName = document.getElementById("fName");
+
+            validateInitilize("fName");
+
+            if (fName.value == "") {        //בדירת שדה חובה
+                validateUpdate("fName", "*חסר שם פרטי");
+                return false;
+
+            } else {                        //בדיקת עברית
+
+                for (i = 0; (i < fName.value.length) && hebrewFlag; i++) {
+                    if ((fName.value.charAt(i) < 'א') || (fName.value.charAt(i) > 'ת'))
+                        hebrewFlag = false;
+                }
+
+                if (!hebrewFlag) {
+                    validateUpdate("fName", "*שם פרטי חייב להיות בעברית");
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        //בדיקת שם משפחה
+        function validateSName() {
+
+            return true;
+        }
+
+        //בדיקת שם משתמש
+        function validateULogin() {
+
+            return true;
+        }
+
+        //בדיקת סיסמא
+        function validateUPass() {
+
+            return true;
+        }
+
+        //בדיקת אימות סיסמא
+        function validateUPassValue() {
+
+            return true;
+        }
+
+        //בדיקת Email
+        function validateUEmail() {
+
+            return true;
+        }
+
+        //בדיקת מספר טלפון
+        function validateUMobile() {
+
+            return true;
+        }
+
+        //בדיקת תאריך לידה
+        function validateBDate() {
+            var bDate_day = document.getElementById("day");
+            var bDate_month = document.getElementById("month");
+            var bDate_year = document.getElementById("year");
+
+            validateInitilize("day");
+
+            //alert(bDate_day.value);
+            switch (bDate_month.value) {
+                case '4':
+                case '6':
+                case '9':
+                case '11':
+                    if (parseInt(bDate_day.value) == 31)
+                        validateUpdate("day", "*בחודש זה יש 30 ימים");
+                        return false;
+                    break;
+
+                case '2': //שנה מעוברת msg = "בחודש זה יש 29 ימים";
+                    if (isLeapYear(parseInt(bDate_year.value))) {
+                        if (parseInt(bDate_day.value) > 29) {
+                            validateUpdate("day", "*בחודש זה יש 29 ימים");
+                            return false;
+                        }
+                    } else if (parseInt(bDate_day.value) > 28) {
+                        validateUpdate("day", "*בחודש זה יש 28 ימים");
+                        return false;
+                    }
+                    return false;
+            }
+            return true;
+        }
+
+        //בדיקת תקנון
+        function validateUTakanon() {
+
+            return true;
+        }
+
+        
+
+    </script>
+</head>
+<body>
+
+    <table border="1" width="100%" cellpadding="15">
+
+        <tr>
+            <td colspan="6" align="center">הרשמה</td>
+        </tr>
+
+        <tr align="center">
+            <th style="width:30%"></th>
+            <th> צור קשר </th>
+            <th> אודות </th>
+            <th> על הפרויקט </th>
+            <th><a href="index.htm">דף הבית</a></th>
+            <th style="width:30%"></th>
+        </tr>
+    </table><br /><br />
+
+    <form name="Form1" id="Form1" action="Default.aspx" method="get" onsubmit="return validate()">
+        <table width="100%" cellpadding="15">
+
+            <tr>
+                <td style="width:10%"></td>
+                <td colspan="2" ="center">
+                    <table cellpadding="10" align="right" dir="rtl">
+                        <tr>
+                            <td align="right"><h3>שם פרטי:</h3></td>
+                            <td><input type="text" name="fName" id="fName" size="50" maxlength="50" style="padding:12px" placeholder="שם פרטי" dir="rtl" /></td>
+                            <td><div id="fName_error" style="color:red" dir="rtl"></div></td>
+                        </tr>
+                        <tr>
+                            <td align="right"><h3>שם משפחה:</h3></td>
+                            <td><input type="text" name="sName" id="sName" size="50" maxlength="50" style="padding:12px" placeholder="שם משפחה" dir="rtl" /></td>
+                            <td><div id="sName_error" style="color:red" dir="rtl"></div></td>
+                        </tr>
+                        <tr>
+                            <td align="right"><h3>שם משתמש:</h3></td>
+                            <td><input type="text" name="uLogin" id="uLogin" size="50" maxlength="50" style="padding:12px" placeholder="שם משתמש" dir="rtl" /></td>
+                            <td><div id="uLogin_error" style="color:red" dir="rtl"></div></td>
+                        </tr>
+                        <tr>
+                            <td align="right"><h3>סיסמא:</h3></td>
+                            <td><input type="password" name="uPass" id="uPass" size="50" maxlength="50" style="padding:12px" placeholder="סיסמא" dir="rtl" /></td>
+                            <td><div id="uPass_error" style="color:red" dir="rtl"></div></td>
+                        </tr>
+                        <tr>
+                            <td align="right"><h3>אימות סיסמא:</h3></td>
+                            <td><input type="password" name="uPassVal" id="uPassVal" size="50" maxlength="50" style="padding:12px" placeholder="אימות סיסמא" dir="rtl" /></td>
+                            <td><div id="uPassVal_error" style="color:red" dir="rtl"></div></td>
+                        </tr>
+                        <tr>
+                            <td align="right"><h3>Email:</h3></td>
+                            <td><input type="email" name="uEmail" id="uEmail" size="50" maxlength="50" style="padding:12px" placeholder="Email" dir="rtl" /></td>
+                            <td><div id="uEmail_error" style="color:red" dir="rtl"></div></td>
+                        </tr>
+                        <tr>
+                            <td align="right"><h3>טלפון:</h3></td>
+                            <td>
+                                <input type="number" name="uMobile" id="uMobile" size="30" maxlength="10" style="padding:12px; text-align:right" placeholder="טלפון נייד" />
+                                <select id="mPhonePref" name="mPhonePref" style="padding:12px"></select>
+                            </td>
+                            <td><div id="uMobile_error" style="color:red" dir="rtl"></div></td>
+                        </tr>
+                        <tr>
+                            <td><h3>תאריך לידה</h3></td>
+                            <td colspan="2">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <select id="year" name="year" style="padding:10px"></select>
+                                            <select id="month" name="month" style="padding:10px"></select>
+                                            <select id="day" name="day" style="padding:10px"></select>
+                                        </td>
+                                        <td></td>
+                                        <td><p id="day_error" style="color:red" dir="rtl"></p></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td></td>
+                            <td align="center">הסכמה עם תנאי השימוש באתר: <input type="checkbox" name="uTakanon" id="uTakanon" /></td>
+                            <td><div id="uTakanon_error" style="color:red" dir="rtl"></div></td>
+                        </tr>
+
+                        <tr>
+                            <td></td>
+                            <td align="center">
+                                <input type="submit" name="Submit" id="Submit" style="padding:15px 155px; background-color:#4CAF50; color: white; text-align: center; font-size: 16px" value="סיים הרשמה" />
+                            </td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="width:40%"></td>
+            </tr>
+
+        </table>
+    </form>
+</body>
+</html>
